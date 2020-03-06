@@ -5,13 +5,15 @@
 
 #include<iostream>
 #include<cmath>
+#include <string>
+#include <vector>
 
 class complex
 {
 	// Make function to overload operator<< a friend
-	friend std::ostream& operator<<(std::ostream &os, const complex &complex_no);
+	friend std::ostream& operator<<(std::ostream& os, const complex& complex_no);
 	//extraction friend
-	friend std::istream& operator>>(std::istream &is, complex &complex_no);
+	friend std::istream& operator>>(std::istream& is, complex& complex_no);
 private:
 	double real;
 	double im;
@@ -22,9 +24,18 @@ public:
 	~complex() {}
 
 	// Return real component
-	double real_component() const {return real; }
+	double real_component() const { return real; }
 	// Return imaginary component
 	double im_component() const { return im; }
+	//to change parts
+	double set_real(double real_part) {
+		real = real_part;
+		return real;
+	}
+	double set_im(double im_part) {
+		im = im_part;
+		return im;
+	}
 	// Return modulus
 	double modulus()
 	{
@@ -32,16 +43,16 @@ public:
 		return modulus;
 	}
 	// Return argument
-	double argument() 
+	double argument()
 	{
-		double arg = atan(im/real);
+		double arg = atan(im / real);
 		return arg;
 	}
 	// Return complex conjugate
 	complex conjugate() const
 	{
 		double conj_im_componrnt = -im;
-		complex complex_conjugate{ real, conj_im_componrnt};
+		complex complex_conjugate{ real, conj_im_componrnt };
 		return complex_conjugate;
 	}
 	// Overload + operator for addition 
@@ -60,37 +71,38 @@ public:
 	// Overload * operator for multiplication
 	complex operator*(const complex& complex_one) const
 	{
-		complex multiplied_complex{ (real*complex_one.real_component()) -(im*complex_one.im_component()), (real*complex_one.im_component()) + (im*complex_one.real_component()) };
+		complex multiplied_complex{ (real * complex_one.real_component()) - (im * complex_one.im_component()), (real * complex_one.im_component()) + (im * complex_one.real_component()) };
 		return multiplied_complex;
 	}
 	// Overload / operator for division first by double and then by complex
-	complex operator/(const double &denominator) const 
+	complex operator/(const double& denominator) const
 	{
 		complex div_by_double{ real / denominator, im / denominator };
 		return div_by_double;
 	}
 	complex operator/(const complex& complex_one) const
 	{
-		
-		complex divided_complex{(*this) * complex_one.conjugate()/ (complex_one * (complex_one.conjugate())).real_component() };
+
+		complex divided_complex{ (*this) * complex_one.conjugate() / (complex_one * (complex_one.conjugate())).real_component() };
 		return divided_complex;
 	}
 };
 
 // Function to overload << operator for complex numbers
-std::ostream &operator<<(std::ostream& os, const complex &complex_no) 
+std::ostream& operator<<(std::ostream& os, const complex& complex_no)
 {
-	if (complex_no.im > 0) {
+	if (complex_no.im >= 0) {
 		os << complex_no.real << "+" << complex_no.im << "i";
 	}
-	else {
+	else{
 		os << complex_no.real << complex_no.im << "i";
 	}
 	return os;
-}
+} 
 //function to extract complex numbers. overload >> operator
-std::istream &operator>>(std::istream &is, complex& complex_no) 
+std::istream& operator>>(std::istream& is, complex& complex_no)
 {
+	std::cout << "please enter a complex number of the form a +/- bi: ";
 	is >> complex_no.real >> complex_no.im;
 	return is;
 }
@@ -123,9 +135,7 @@ int main()
 
 	//user enter a complex number and overload >> function
 	complex entered_complex_number;
-	std::cout << "please enter a complex number of the form a +/- bi: ";
 	std::cin >> entered_complex_number;
 	std::cout << entered_complex_number;
-
 	return 0;
 }
